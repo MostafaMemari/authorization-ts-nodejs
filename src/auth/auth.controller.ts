@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { Controller, Post } from "../decorators/router.decorator";
 import { UserModel } from "../models/user.model";
 import { compareHashString, errorHandler, jwtGenerator } from "../modules/utils";
-import { FindUser, IUser } from "../types/user.types";
+import { IUser } from "../types/user.types";
 import { AuthService } from "./auth.service";
 import { RegisterDTO } from "./auth.dto";
 import { plainToClass } from "class-transformer";
@@ -33,7 +33,7 @@ export class AuthController {
     try {
       const { username, password } = req.body;
 
-      const existUser: FindUser | null = await UserModel.findOne({ username });
+      const existUser: IUser | null = await UserModel.findOne({ username });
       if (!existUser) throw { status: 401, message: "this username or password is incorrect" };
 
       const isTrueUser: boolean = compareHashString(password, existUser.password);
