@@ -1,24 +1,28 @@
 import { NextFunction, Request, Response } from "express";
 import { Controller, Post } from "../decorators/router.decorator";
 import { UserModel } from "../models/user.model";
-import { HashString, compareHashString, jwtGenerator } from "../modules/utils";
-import { FindUser } from "../types/user.types";
+import { compareHashString, errorHandler, jwtGenerator } from "../modules/utils";
+import { FindUser, IUser } from "../types/user.types";
+import { AuthService } from "./auth.service";
+import { RegisterDTO } from "./auth.dto";
+import { plainToClass } from "class-transformer";
+import { validateSync } from "class-validator";
+
+const authService: AuthService = new AuthService();
 
 @Controller("/auth")
 export class AuthController {
   @Post()
   async register(req: Request, res: Response, next: NextFunction) {
     try {
-      const { username, password, fullname } = req.body;
-      const newPassword = HashString(password);
-      const existUser = await UserModel.findOne({ username });
-      if (existUser) throw { status: 400, message: "this username already exist" };
-      const user = await UserModel.create({
-        username,
-        password: newPassword,
-        fullname,
-      });
+      const registerDto: RegisterDTO = plainToClass(RegisterDTO, req.body, { excludeExtraneousValues: true });
+      const errors = validateSync(registerDto);
 
+      const checkedErrors = errorHandler(errors);
+
+      if (checkedErrors.length > 0) throw { status: 400, message: "validation Error", errors: checkedErrors };
+
+      const user: IUser = await authService.register(registerDto);
       return res.status(201).json(user);
     } catch (error) {
       next(error);

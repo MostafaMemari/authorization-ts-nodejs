@@ -1,2 +1,2 @@
-import "./controllers/home.controller";
-import "./controllers/auth.controller";
+import "./home/home.controller";
+import "./auth/auth.controller";

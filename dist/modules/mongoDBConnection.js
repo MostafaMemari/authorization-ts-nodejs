@@ -25,10 +25,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = __importStar(require("mongoose"));
 mongoose
-    .connect(`mongodb://localhost:27017/node-ts`)
-    .then(() => {
-    console.log("connected To node-ts DB!");
-})
-    .catch((err) => {
-    console.log(err.message);
-});
+    .connect(`mongodb://127.0.0.1:27017/node-ts`)
+    .then(() => console.log("connected To node-ts DB!"))
+    .catch((err) => console.log(err.message));

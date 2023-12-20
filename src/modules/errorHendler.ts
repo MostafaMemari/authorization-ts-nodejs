@@ -17,7 +17,8 @@ export function AllExceptionHandler(app: Application) {
 
     const response: ResponseMethod = {
       statusCode,
-      message: message,
+      message,
+      errors: error?.errors || [],
     };
     return res.status(statusCode).json(response);
   });

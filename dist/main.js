@@ -9,18 +9,14 @@ const index_routes_1 = __importDefault(require("./routes/index.routes"));
 const app = (0, express_1.default)();
 require("./app.module");
 require("./modules/mongoDBConnection");
+const errorHendler_1 = require("./modules/errorHendler");
 const server = http_1.default.createServer(app);
 const PORT = 4040;
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(index_routes_1.default);
-app.use((req, res, next) => {
-    const response = {
-        statusCode: 404,
-        message: "Not Found Page",
-    };
-    return res.status(404).json(response);
-});
+(0, errorHendler_1.notFoundHander)(app);
+(0, errorHendler_1.AllExceptionHandler)(app);
 server.listen(PORT, () => {
     console.log(`Server Run over : http://localhost:${PORT}`);
 });

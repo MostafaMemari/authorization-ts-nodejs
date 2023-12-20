@@ -5,7 +5,6 @@ const express_1 = require("express");
 const DecoratorRouter = (0, express_1.Router)();
 function Get(path) {
     return function (target, propertyKey, descriptor) {
-        console.log(path);
         const route = path ? (path[0] == "/" ? path : "/" + path) : "/" + propertyKey;
         DecoratorRouter.get(`${route}`, descriptor.value);
     };

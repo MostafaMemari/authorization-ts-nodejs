@@ -1,6 +1,7 @@
 import { compareSync, genSaltSync, hashSync } from "bcrypt";
 import { Algorithm, sign } from "jsonwebtoken";
 import { UserModel } from "../models/user.model";
+import { jwtGeneratorPayloadDTO } from "../types/public.types";
 
 const AccessTokenSecretKey = "BE2378478573736B435CE746585A250E";
 
@@ -12,9 +13,8 @@ export function HashString(data: string): string {
 export function compareHashString(data: string, encrypted: string): boolean {
   return compareSync(data, encrypted);
 }
-
-export async function jwtGenerator(payload: any): Promise<void> {
-  const { id, username } = payload;
+export async function jwtGenerator(payload: jwtGeneratorPayloadDTO): Promise<void> {
+  const { id } = payload;
   const user = await UserModel.findById(id);
   if (!user) throw { status: 404, message: "not found user" };
 
@@ -27,4 +27,11 @@ export async function jwtGenerator(payload: any): Promise<void> {
       await user.save();
     }
   });
+}
+export function errorHandler(errors: any[]) {
+  let errorTexts: string[] = [];
+  for (const errorItem of errors) {
+    errorTexts = errorTexts.concat(errorItem.constraints);
+  }
+  return errorTexts;
 }
