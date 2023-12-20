@@ -8,6 +8,7 @@ const http_1 = __importDefault(require("http"));
 const index_routes_1 = __importDefault(require("./routes/index.routes"));
 const app = (0, express_1.default)();
 require("./app.module");
+require("./modules/mongoDBConnection");
 const server = http_1.default.createServer(app);
 const PORT = 4040;
 app.use(express_1.default.json());

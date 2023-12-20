@@ -4,7 +4,9 @@ import http, { Server } from "http";
 import { ResponseMethod } from "./types/public.types";
 import ApplicationRouter from "./routes/index.routes";
 const app: Application = express();
+
 import "./app.module";
+import "./modules/mongoDBConnection";
 
 const server: Server = http.createServer(app);
 const PORT = 4040;

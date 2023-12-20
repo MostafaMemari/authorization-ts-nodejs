@@ -4,7 +4,6 @@ const DecoratorRouter: Router = Router();
 
 export function Get(path?: string | undefined) {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
-    console.log(path);
     const route = path ? (path[0] == "/" ? path : "/" + path) : "/" + propertyKey;
 
     DecoratorRouter.get(`${route}`, descriptor.value);
