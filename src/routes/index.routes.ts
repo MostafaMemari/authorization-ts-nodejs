@@ -1,7 +1,7 @@
 import { Router } from "express";
 
+import DecoratorRouter from "../decorators/router.decorator";
+
 const router: Router = Router();
-
-router.get("/homeinfo");
-
+router.use(DecoratorRouter);
 export default router;

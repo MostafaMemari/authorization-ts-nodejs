@@ -1,3 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./controllers/home.controller");
+require("./controllers/auth.controller");

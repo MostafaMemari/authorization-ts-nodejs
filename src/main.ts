@@ -4,9 +4,13 @@ import http, { Server } from "http";
 import { ResponseMethod } from "./types/public.types";
 import ApplicationRouter from "./routes/index.routes";
 const app: Application = express();
+import "./app.module";
 
 const server: Server = http.createServer(app);
 const PORT = 4040;
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(ApplicationRouter);
 
