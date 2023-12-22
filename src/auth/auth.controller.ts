@@ -16,12 +16,6 @@ export class AuthController {
   async register(req: Request, res: Response, next: NextFunction) {
     try {
       const registerDto: RegisterDTO = plainToClass(RegisterDTO, req.body, { excludeExtraneousValues: true });
-      const errors = validateSync(registerDto);
-
-      const checkedErrors = errorHandler(errors);
-
-      if (checkedErrors.length > 0) throw { status: 400, message: "validation Error", errors: checkedErrors };
-
       const user: IUser = await authService.register(registerDto);
       return res.status(201).json(user);
     } catch (error) {
@@ -33,14 +27,7 @@ export class AuthController {
     try {
       const { username, password } = req.body;
 
-      const existUser: IUser | null = await UserModel.findOne({ username });
-      if (!existUser) throw { status: 401, message: "this username or password is incorrect" };
-
-      const isTrueUser: boolean = compareHashString(password, existUser.password);
-      if (!isTrueUser) throw { status: 401, message: "this username or password is incorrect" };
-
-      await jwtGenerator({ username, id: existUser._id });
-      const user = await UserModel.findById(existUser._id, { password: 0 });
+      const user = await authService.login({ username, password });
 
       return res.json({
         statusCode: 200,

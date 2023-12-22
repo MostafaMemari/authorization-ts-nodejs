@@ -20,3 +20,12 @@ export class RegisterDTO {
   @Matches(RegExp(/^\w{5,35}$/))
   fullname: string;
 }
+export class LoginDTO {
+  @IsDefined()
+  @Expose()
+  @Matches(RegExp(/^[A-Za-z0-9\_\.]{5,20}$/))
+  username: string;
+  @IsDefined()
+  @Expose()
+  password: string;
+}
