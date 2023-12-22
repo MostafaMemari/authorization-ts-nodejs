@@ -20,7 +20,10 @@ export class BlogController {
     }
   }
   @Get()
-  getAllBlogs() {}
+  async getAllBlogs(req: Request, res: Response, next: NextFunction) {
+    const blogs: IBlog[] = await blogService.fetchAll();
+    return res.send(blogs);
+  }
   @Get()
   getBlogByID() {}
   @Delete()

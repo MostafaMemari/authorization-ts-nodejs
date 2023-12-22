@@ -1,4 +1,3 @@
-import { plainToClass } from "class-transformer";
 import { BlogIdDto, createBlogDto } from "./blog.dto";
 import { IBlog } from "./blog.type";
 import { validateSync } from "class-validator";
@@ -15,7 +14,8 @@ export class BlogService {
     return blog;
   }
   async fetchAll(): Promise<IBlog[]> {
-    return [];
+    const blogs: IBlog[] = await BlogModel.find({});
+    return blogs;
   }
   async fetchByID(blogId: BlogIdDto): Promise<IBlog | undefined> {
     return undefined;
