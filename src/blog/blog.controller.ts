@@ -51,6 +51,18 @@ export class BlogController {
       next(error);
     }
   }
-  @Delete()
-  RemoveBlogByID() {}
+  @Delete("/delete/:id")
+  async RemoveBlogByID(req: Request, res: Response, next: NextFunction) {
+    try {
+      const blogDto: BlogIdDto = plainToClass(BlogIdDto, req.params);
+      const message: string = await blogService.removeByID(blogDto);
+
+      return res.json({
+        statusCode: 200,
+        message,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

@@ -24,6 +24,10 @@ export class BlogService {
     return blog;
   }
   async removeByID(blogId: BlogIdDto): Promise<string> {
-    return "";
+    const blog: FindDoc<IBlog> = await this.fetchByID(blogId);
+    const deleteResult: any = await BlogModel.deleteOne({ _id: blogId.id });
+    if (deleteResult.deletedCount > 0) return "deleted blog successfully";
+
+    return "error : cannot remove blog";
   }
 }
