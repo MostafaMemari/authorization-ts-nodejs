@@ -1,5 +1,6 @@
 import { Expose } from "class-transformer";
-import { IsDefined } from "class-validator";
+import { IsDefined, Matches } from "class-validator";
+import { ObjectId, isObjectIdOrHexString } from "mongoose";
 
 export class createBlogDto {
   @IsDefined()
@@ -12,4 +13,7 @@ export class createBlogDto {
   @Expose()
   author: string;
 }
-export class BlogIdDto {}
+export class BlogIdDto {
+  @Matches(RegExp(/^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i))
+  id: ObjectId;
+}
