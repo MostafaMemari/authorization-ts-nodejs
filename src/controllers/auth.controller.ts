@@ -1,33 +1,30 @@
 import { NextFunction, Request, Response } from "express";
-import { Controller, Post } from "../decorators/router.decorator";
-import { UserModel } from "../models/user.model";
-import { compareHashString, errorHandler, jwtGenerator } from "../modules/utils";
 import { IUser } from "../types/user.types";
-import { AuthService } from "./auth.service";
-import { RegisterDTO } from "./auth.dto";
 import { plainToClass } from "class-transformer";
-import { validateSync } from "class-validator";
+import { Controller, Post } from "@overnightjs/core";
+import { AuthService } from "../services/auth.service";
+import { LoginDTO, RegisterDTO } from "../dtos/auth.dto";
 
-const authService: AuthService = new AuthService();
-
-@Controller("/auth")
+@Controller("auth")
 export class AuthController {
-  @Post()
+  private authService: AuthService = new AuthService();
+
+  @Post("register")
   async register(req: Request, res: Response, next: NextFunction) {
     try {
       const registerDto: RegisterDTO = plainToClass(RegisterDTO, req.body, { excludeExtraneousValues: true });
-      const user: IUser = await authService.register(registerDto);
+      const user: IUser = await this.authService.register(registerDto);
       return res.status(201).json(user);
     } catch (error) {
       next(error);
     }
   }
-  @Post()
+  @Post("login")
   async login(req: Request, res: Response, next: NextFunction) {
     try {
-      const { username, password } = req.body;
+      const loginDto: LoginDTO = plainToClass(LoginDTO, req.body, { excludeExtraneousValues: true });
 
-      const user = await authService.login({ username, password });
+      const user: IUser = await this.authService.login(loginDto);
 
       return res.json({
         statusCode: 200,

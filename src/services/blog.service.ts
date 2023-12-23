@@ -1,9 +1,9 @@
-import { BlogIdDto, createBlogDto } from "./blog.dto";
-import { IBlog } from "./blog.type";
+import { BlogIdDto, createBlogDto } from "../dtos/blog.dto";
+import { IBlog } from "../types/blog.type";
 import { validateSync } from "class-validator";
-import { errorHandler } from "../modules/utils";
-import { BlogModel } from "../models/blog.model";
+import { BlogModel } from "../model/blog.model";
 import { FindDoc } from "../types/public.types";
+import { errorHandler } from "../utils/ApiErrorHandler";
 
 export class BlogService {
   async create(blogDto: createBlogDto): Promise<IBlog> {

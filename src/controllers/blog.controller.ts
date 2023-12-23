@@ -1,20 +1,20 @@
-import { NextFunction, Request, Response } from "express";
-import { Controller, Delete, Get, Post } from "../decorators/router.decorator";
-import { BlogService } from "./blog.service";
-import { BlogIdDto, createBlogDto } from "./blog.dto";
+import { Controller, Delete, Get, Post } from "@overnightjs/core";
+import { Request, Response, NextFunction } from "express";
+import { BlogIdDto, createBlogDto } from "../dtos/blog.dto";
 import { plainToClass } from "class-transformer";
-
-import { IBlog } from "./blog.type";
+import { IBlog } from "../types/blog.type";
+import { BlogService } from "../services/blog.service";
 import { FindDoc } from "../types/public.types";
-const blogService: BlogService = new BlogService();
 
-@Controller("/blog")
+@Controller("blog")
 export class BlogController {
+  private blogService: BlogService = new BlogService();
+
   @Post()
   async createBlog(req: Request, res: Response, next: NextFunction) {
     try {
       const blogDto: createBlogDto = plainToClass(createBlogDto, req.body);
-      const blog: IBlog = await blogService.create(blogDto);
+      const blog: IBlog = await this.blogService.create(blogDto);
       return res.status(201).json({ statusCode: 201, message: "created", data: { blog } });
     } catch (error) {
       next(error);
@@ -23,7 +23,7 @@ export class BlogController {
   @Get()
   async getAllBlogs(req: Request, res: Response, next: NextFunction) {
     try {
-      const blogs: IBlog[] = await blogService.fetchAll();
+      const blogs: IBlog[] = await this.blogService.fetchAll();
 
       return res.json({
         statusCode: 200,
@@ -39,7 +39,7 @@ export class BlogController {
   async getBlogByID(req: Request, res: Response, next: NextFunction) {
     try {
       const blogDto: BlogIdDto = plainToClass(BlogIdDto, req.params);
-      const blog: FindDoc<IBlog> = await blogService.fetchByID(blogDto);
+      const blog: FindDoc<IBlog> = await this.blogService.fetchByID(blogDto);
 
       return res.json({
         statusCode: 200,
@@ -55,7 +55,7 @@ export class BlogController {
   async RemoveBlogByID(req: Request, res: Response, next: NextFunction) {
     try {
       const blogDto: BlogIdDto = plainToClass(BlogIdDto, req.params);
-      const message: string = await blogService.removeByID(blogDto);
+      const message: string = await this.blogService.removeByID(blogDto);
 
       return res.json({
         statusCode: 200,

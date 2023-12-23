@@ -7,8 +7,12 @@ export type ResponseMethod = {
   data?: object | undefined;
   errors?: object | undefined;
 };
-export interface jwtGeneratorPayloadDTO {
+export interface JwtToken {
   id: ObjectId;
   username: IUser["username"];
 }
 export type FindDoc<T> = T | null | undefined;
+
+export interface HttpError extends ErrorEvent {
+  status?: number;
+}

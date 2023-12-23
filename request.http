@@ -1,0 +1,11 @@
+DELETE http://localhost:3400/blog/4456465645
+
+###
+POST http://localhost:3400/blog/
+
+{
+   "title" : "my title",
+   "text" : "my Text"
+}
+
+
